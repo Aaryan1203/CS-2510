@@ -1,0 +1,9 @@
+  ArrayList<ArrayList<Vertex>> board;
+  int sizeRow;
+  int sizeCol;
+  Random rand;
+  int worldSize;
+  int unit;
+  HashMap<Vertex, Vertex> representatives;
+  ArrayList<Edge> edgesInTree;
+  ArrayList<Edge> worklist;

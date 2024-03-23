@@ -1,0 +1,357 @@
+import tester.Tester;
+
+//represents a list of XML's
+interface ILoXML {
+
+  //checks the length of the ILoXML
+  int checkLength();
+
+  //checks if the List has a tag with the given name
+  boolean hasTagList(String name);
+}
+
+//represents an empty list of XML's
+class MtLoXML implements ILoXML {
+  /*
+   * Fields:
+   *  
+   * Methods:
+   *  this.checkLength() ... int
+   *  this.hasTagList() ... int
+   * Methods of fields:
+   * 
+   */
+
+  //checks the length of the empty list
+  public int checkLength() {
+    return 0;
+  }
+
+  //checks if the empty list has a tag with the given name
+  public boolean hasTagList(String name) {
+    return false;
+  }
+}
+
+//represents a non-empty list of XML's
+class ConsLoXML implements ILoXML {
+  IXML first;
+  ILoXML rest;
+
+  ConsLoXML(IXML first, ILoXML rest) {
+    this.first = first;
+    this.rest = rest;
+  }
+
+  //checks the length of a non-empty list
+  public int checkLength() {
+    return first.contentLength() + rest.checkLength();
+  }
+
+  //checks with the non-empty list has a tag with the given name
+  public boolean hasTagList(String name) {
+    return this.first.hasTag(name)
+        || this.rest.hasTagList(name);
+  }
+
+  /*
+   * Fields:
+   *  this.first ... IXML
+   *  this.rest ... ILoXML
+   * Methods:
+   *  rest.checkLength() ... int
+   *  rest.hasTagList() ... boolean
+   * Methods of fields:
+   *  first.contentLength() ... int
+   *  first.hasTag() ... boolean
+   */
+
+}
+
+//represents an XML
+interface IXML {
+
+  //computes the length of the content in an XML document
+  int contentLength();
+
+  //determines if a piece of XML contains a Tag with the given name
+  boolean hasTag(String name);
+
+}
+
+//represents an XML with plain text 
+class PlainText implements IXML {
+  String txt;
+
+  PlainText(String txt) {
+    this.txt = txt;
+  }
+
+  /*
+   * Fields:
+   *  this.txt ... String
+   * Methods:
+   *  this.contentLength() ... int
+   *  this.hasTag(String) ... boolean
+   * Methods of fields:
+   * 
+   */
+
+  //determines the length of plain text
+  public int contentLength() {
+    return this.txt.length();
+  }
+
+  //determines if the plain text contains a Tag with the given name
+  public boolean hasTag(String name) {
+    return false;
+  }
+
+}
+
+//represents an XML with no tags
+class Untagged implements IXML {
+  ILoXML content;
+
+  Untagged(ILoXML content) {
+    this.content = content;
+  }
+
+  /*
+   * Fields:
+   *  this.content ... ILoXML
+   * Methods:
+   *  this.contactLength() ... int
+   *  this.hasTag(String) ... boolean
+   * Methods of fields:
+   *  this.checkLength() ... int
+   *  this.hasTagList() ... boolean
+   */
+
+  //determines the length of text in the Untagged xml
+  public int contentLength() {
+    return this.content.checkLength();
+  }
+
+  //determines if the xml contains a Tag with the given name
+  public boolean hasTag(String name) {
+    return this.content.hasTagList(name);
+  }
+
+}
+
+//represents an XML with tags
+class Tagged implements IXML {
+  Tag tag;
+  ILoXML content;
+
+  Tagged(Tag tag, ILoXML content) {
+    this.tag = tag;
+    this.content = content;
+  }
+  /*
+   * Fields:
+   *  this.tag ... Tag
+   *  this.content ... ILoXML
+   * Methods:
+   *  this.contentLength() ... int
+   *  this.hasTag(String) ... boolean
+   * Methods of fields:
+   *  this.checkLength() ... int
+   *  this.hasTag() ... boolean
+   *  this.sameTag() ... boolean
+   */
+
+  //determines the length of the text in the Tagged xml
+  public int contentLength() {
+    return this.content.checkLength();
+  }
+
+  //determines if the xml contains a Tag with the given name
+  public boolean hasTag(String name) {
+    return this.tag.sameTag(name)
+        || this.content.hasTagList(name);
+  }
+
+
+}
+
+//represents a tag for an XML
+class Tag {
+  String name;
+  ILoAtt atts;
+
+  Tag(String name, ILoAtt atts) {
+    this.name = name;
+    this.atts = atts;
+  }
+
+  /*
+   * Fields:
+   *  this.name ... String
+   *  this.atts ... ILoXML
+   * Methods:
+   *  
+   * Methods of fields:
+   * 
+   */
+  boolean sameTag(String tagName) {
+    return this.name = tagName;
+  }
+}
+
+//represents a list of Attributes
+interface ILoAtt {
+
+}
+
+//represents an empty list of attributes
+class MtLoAtt implements ILoAtt {
+
+  /*
+   * Fields:
+   *  
+   * Methods:
+   *  
+   * Methods of fields:
+   * 
+   */
+
+}
+
+//represents a non-empty list of attributes
+class ConsLoAtt implements ILoAtt {
+  Att first;
+  ILoAtt rest;
+
+  ConsLoAtt(Att first, ILoAtt rest) {
+    this.first = first;
+    this.rest = rest;
+  }
+
+  /*
+   * Fields:
+   *  this.first ... Att
+   *  this.rest ... ILoAtt
+   * Methods:
+   *  
+   * Methods of fields:
+   * 
+   */
+
+}
+
+//represents an attribute
+class Att {
+  String name;
+  String value;
+
+  Att(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
+
+  /*
+   * Fields:
+   *  this.name ... String
+   *  this.value ... String
+   * Methods:
+   *  
+   * Methods of fields:
+   * 
+   */
+
+}
+
+//examples of XML's
+class ExamplesXML {
+
+
+  //plain texts
+  IXML xml = new PlainText("XML");
+  IXML iAm = new PlainText("I am ");
+  IXML exclimationMark = new PlainText("!");
+  IXML x = new PlainText("X");
+  IXML ml = new PlainText("ML");
+
+  //empty lists
+  MtLoAtt emptyAtt = new MtLoAtt();
+  MtLoXML emptyXML = new MtLoXML();
+
+  //Attributes
+  Att volume30 = new Att("volume", "30db");
+  Att duration5 = new Att("duration", "5sec");
+
+  //<yell>
+  Tag yell = new Tag("yell", this.emptyAtt);
+
+  //<italic>
+  Tag italic = new Tag("italic", this.emptyAtt);
+
+  //<yell volume="30db">
+  Tag yellVolume30 = new Tag("yell", new ConsLoAtt(this.volume30, this.emptyAtt));
+
+  //<yell volume="30db" duration="5sec">
+  Tag yellVolume30Duration5 = new Tag("yell", new ConsLoAtt(this.volume30, 
+      new ConsLoAtt(this.duration5, emptyAtt)));
+
+  //<yell>XML</yell>
+  IXML yellXML = new Tagged(this.yell, new ConsLoXML(this.xml, this.emptyXML));
+
+  //<italic>X</italic>
+  IXML italicX = new Tagged(this.italic, new ConsLoXML(this.x, this.emptyXML));
+
+  //<yell><italic>X</italic>ML</yell>
+  IXML yellItalicXML = new Tagged(this.yell, new ConsLoXML(this.italicX, 
+      new ConsLoXML(this.ml, this.emptyXML)));
+
+  //<yell volume="30db"><italic>X</italic>ML</yell>
+  IXML yellVol30ItalicXML = new Tagged(this.yellVolume30, 
+      new ConsLoXML(this.italicX, new ConsLoXML(this.ml, this.emptyXML)));
+
+  //<yell volume="30db" duration="5sec"><italic>X</italic>ML</yell>
+  IXML yellVol30Dur5ItalicXML = new Tagged(this.yellVolume30Duration5, 
+      new ConsLoXML(this.italicX, new ConsLoXML(this.ml, this.emptyXML)));
+
+  //I am XML!
+  IXML xml1 = new PlainText("I am XML!");
+
+  //I am <yell>XML</yell>!
+  IXML xml2 = new Untagged(new ConsLoXML(this.iAm, new ConsLoXML(this.yellXML, 
+      new ConsLoXML(this.exclimationMark, this.emptyXML))));
+
+  //I am <yell><italic>X</italic>ML</yell>!
+  IXML xml3 = new Untagged(new ConsLoXML(iAm, new ConsLoXML(this.yellItalicXML, 
+      new ConsLoXML(this.exclimationMark, this.emptyXML))));
+
+  //I am <yell volume="30db"><italic>X</italic>ML</yell>!
+  IXML xml4 = new Untagged(new ConsLoXML(iAm, new ConsLoXML(this.yellVol30ItalicXML, 
+      new ConsLoXML(this.exclimationMark, this.emptyXML))));
+
+  //I am <yell volume="30db" duration="5sec"><italic>X</italic>ML</yell>!
+  IXML xml5 = new Untagged(new ConsLoXML(iAm, 
+      new ConsLoXML(this.yellVol30Dur5ItalicXML, new ConsLoXML(this.exclimationMark, this.emptyXML))));
+
+
+  boolean testXML(Tester t) {
+    return t.checkExpect(this.xml1.contentLength(), 9)
+        && t.checkExpect(this.exclimationMark.contentLength(), 1)
+        && t.checkExpect(this.yellXML.contentLength(), 3)
+        && t.checkExpect(this.italicX.contentLength(), 1)
+        && t.checkExpect(this.xml2.contentLength(), 9)
+        && t.checkExpect(this.xml.hasTag(this.yell), false)
+        && t.checkExpect(this.xml2.hasTag(this.yell), false)
+        && t.checkExpect(this.xml2.hasTag(this.italic), false)
+        && t.checkExpect(this.xml3.hasTag(this.italic), false);
+
+  }
+
+}
+
+
+
+
+
+
+
+

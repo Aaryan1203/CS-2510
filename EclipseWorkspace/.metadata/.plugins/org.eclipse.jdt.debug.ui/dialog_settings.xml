@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth0" value="85"/>
+	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth1" value="609"/>
+	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth2" value="73"/>
+	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.sortColumn" value="1"/>
+	<item key="JavaDependenciesTab.LAST_PATH_SETTING" value="/Users/aaryan/Documents/College/Semester 2/Fundies 2/EclipseJars"/>
+	<section name="org.eclipse.jdt.debug.ui.MAIN_METHOD_SELECTION_DIALOG">
+		<item key="ShowStatusLine" value="true"/>
+		<item key="History" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History&gt;&#x0A;&lt;historyRootNode&gt;&#x0A;&lt;infoNode&gt;=Lab1/\/Users\/aaryan\/Documents\/College\/Semester 2\/Fundies 2\/EclipseJars\/tester.jar&amp;lt;tester(Main.class[Main&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=Week 3 Homework/\/Users\/aaryan\/Documents\/College\/Semester 2\/Fundies 2\/EclipseJars\/tester.jar&amp;lt;tester(Main.class[Main&lt;/infoNode&gt;&#x0A;&lt;/historyRootNode&gt;&#x0A;&lt;/History&gt;"/>
+		<section name="DialogBoundsSettings">
+			<item key="DIALOG_HEIGHT" value="500"/>
+			<item key="DIALOG_WIDTH" value="600"/>
+			<item key="DIALOG_X_ORIGIN" value="181"/>
+			<item key="DIALOG_Y_ORIGIN" value="-13"/>
+			<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont"/>
+		</section>
+	</section>
+	<section name="expressionHistory">
+	</section>
+</section>

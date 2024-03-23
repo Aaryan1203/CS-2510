@@ -1,0 +1,6 @@
+In this version of Simon, the computer will start by generating one random button and flashes it on the screen. 
+All of the buttons go dark and it then allows the user to select a button. If the user gets it correct,
+the computer will generate a second random button and flash both of them on screen one after the other.
+The user again has a chance to select the previously lit up buttons. If the user gets them correct again,
+the computer will keep generating more buttons until the user fails. Once the user fails, a screen will show up 
+which shows the user that they have lost in a specific number of tries.

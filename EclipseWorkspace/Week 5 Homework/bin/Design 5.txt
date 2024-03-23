@@ -1,0 +1,25 @@
+The game starts with WorldScene being called by the empty constructor. The empty constructor 
+initializes the "answerKey" or the computer generated responses with one random button. It initializes
+the clickedButtons to an empty list, computer mode to true, input mode to false, and the index to 0. 
+Computer mode is the state where it is time for the computer to display the buttons. 
+It will draw a background of the four dark colors using the drawList method which takes in a list and draws
+it on the given background. Because the answerKey is initialized with one random color, that color will light up.  
+onTick will check which mode the game is on. If it is on computer mode, it will generate
+a new random button by calling the randomButton method and add it to the list of answerKey this is added
+using the add method which adds a button to the end of a list of buttons. It will 
+recall the SimonWorld constructor passing in the same arguments except this time increasing the index by 1. 
+All of this happens in the second constructor which takes in values for all of the fields.
+This is so that the world scene will flash the next item in the list. 
+this happens in makeScene as the method draw index is called on the answerKey list of buttons. drawIndex will
+draw the specific button of the list based on the index that is given.
+Once all of the buttons on answerKey flash, it switches the state from computerMode to inputMode by passing in 
+true for inputMode and false for computerMode. It switches state using the empty method. If the list is empty, it will
+switch the mode because that means that there are no more buttons for the computer to flash. In inputMode, it allows 
+the user to click somewhere on the screen. Based on where the use clicks, it will do one of three things. By using the 
+checkLocation method, if the user clicked somewhere that is not one of the four boxes, it will allow them to click again until 
+they click a button. If they click one of the four buttons, it will add that button to the list of clickedButtons once again using the add method. 
+Using the sameList method which utilizes a helper and a sameFirstList method, it will check if both lists are the same. If they are not, 
+it will display the end scene by calling endOfWorld and passing in the number of tries they failed in. It knows how many tries they failed in because it 
+checks the length of the answerKey by using the length method which returns the length of a list of buttons. 
+Otherwise, if the user selects the right button and the lists match up, it will switch back to computer mode and do 
+it all over again until the answerKey and the clickedButtons do not match.

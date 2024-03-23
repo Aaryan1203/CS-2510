@@ -1,0 +1,244 @@
+import tester.Tester;
+
+// a piece of media
+interface IMedia {
+
+  // is this media really old?
+  boolean isReallyOld();
+
+  // are captions available in this language?
+  boolean isCaptionAvailable(String language);
+
+  // a string showing the proper display of the media
+  String format();
+}
+
+abstract class AMedia implements IMedia {
+  String title;
+  ILoString captionOptions;
+  
+  AMedia(String title, ILoString captionOptions) {
+    this.title = title;
+    this.captionOptions = captionOptions;
+  }
+  
+  public boolean isReallyOld() {
+    return false;
+  }
+  
+}
+
+// represents a movie
+class Movie extends AMedia {
+  int year;
+
+  Movie(String title, int year, ILoString captionOptions) {
+    super(title, captionOptions);
+    this.year = year;
+  }
+  
+  /*
+   * Fields:
+   *  this.title ... String
+   *  this.year .. int
+   *  this.captionOptions ... ILoString
+   * Methods:
+   *  this.isReallOld() ... boolean
+   *  this.isCaptionAvailable(String) ... boolean
+   *  this.format() ... String
+   * Methods of Fields:
+   *  this.captionOptions.checkCaption(String) ... boolean
+   */
+
+  public boolean isReallyOld() {
+    return (this.year < 1930);
+  }
+
+  public boolean isCaptionAvailable(String language) {
+    return this.captionOptions.checkCaption(language);
+  }
+
+  public String format() {
+    return this.title + " (" + this.year + ")";
+  }
+}
+
+// represents a TV episode
+class TVEpisode extends AMedia {
+  String showName;
+  int seasonNumber;
+  int episodeOfSeason;
+
+  TVEpisode(String title, String showName, int seasonNumber, int episodeOfSeason,
+      ILoString captionOptions) {
+    super(title, captionOptions);
+    this.showName = showName;
+    this.seasonNumber = seasonNumber;
+    this.episodeOfSeason = episodeOfSeason;
+  }
+
+  /*
+   * Fields:
+   *  this.title ... String
+   *  this.showName .. String
+   *  this.seasonNumber ... int
+   *  this.episodeOfSeason ... int
+   *  this.captionOptions ... ILoString
+   * Methods:
+   *  this.isReallOld() ... boolean
+   *  this.isCaptionAvailable(String) ... boolean
+   *  this.format() ... String
+   * Methods of Fields:
+   *  this.captionOptions.checkCaption(String) ... boolean
+   */
+  
+
+  public boolean isCaptionAvailable(String language) {
+    return this.captionOptions.checkCaption(language);
+  }
+
+  public String format() {
+    return this.showName + " " + this.seasonNumber + "." + this.episodeOfSeason + " - " + this.title;
+  }
+}
+
+// represents a YouTube video
+class YTVideo extends AMedia {
+  String channelName;
+
+  public YTVideo(String title, String channelName, ILoString captionOptions) {
+    super(title, captionOptions);
+    this.channelName = channelName;
+  }
+  
+  /*
+   * Fields:
+   *  this.title ... String
+   *  this.channelName .. String
+   *  this.captionOptions ... ILoString
+   * Methods:
+   *  this.isReallOld() ... boolean
+   *  this.isCaptionAvailable(String) ... boolean
+   *  this.format() ... String
+   * Methods of Fields:
+   *  this.captionOptions.checkCaption(String) ... boolean
+   */
+  
+
+  public boolean isCaptionAvailable(String language) {
+    return this.captionOptions.checkCaption(language);
+  }
+
+  public String format() {
+    return this.title + " by " + this.channelName;
+  }
+
+}
+
+// lists of strings
+interface ILoString {
+  
+  //checks if the given caption is in the list of strings
+  boolean checkCaption(String language);
+  
+}
+
+// an empty list of strings
+class MtLoString implements ILoString {
+
+  //checks if the given language is in the empty list of strings
+  public boolean checkCaption(String language) {
+    return false;
+  }
+  
+  /*
+   * Fields:
+   * 
+   * Methods:
+   *  this.checkCaption(String) ... boolean
+   *  
+   * Methods of Fields:
+   * 
+   */
+  
+}
+
+// a non-empty list of strings
+class ConsLoString implements ILoString {
+  String first;
+  ILoString rest;
+
+  ConsLoString(String first, ILoString rest) {
+    this.first = first;
+    this.rest = rest;
+  }
+
+  //checks if the given language is in the non-empty list of strings
+  public boolean checkCaption(String language) {
+    return this.first.equals(language) || this.rest.checkCaption(language);
+  }
+  
+  /*
+   * Fields: 
+   *  this.first ... String
+   *  this.rest ... ILoString
+   * Methods:
+   *  rest.captionOptions.checkCaption(String) ... boolean
+   * Methods of Fields:
+   * 
+   */
+  
+}
+
+class ExamplesMedia {
+
+  IMedia shrek = new Movie("Shrek 1", 2001, 
+      new ConsLoString("English", new ConsLoString("Spanish", new MtLoString())));
+
+  IMedia veryOldShrek = new Movie("Shrek -5", 1925,
+      new ConsLoString("English", new MtLoString()));
+
+  IMedia friendsEpOne = new TVEpisode("Pilot", "Friends", 1, 1, 
+      new ConsLoString("English", new ConsLoString("Spanish", new ConsLoString("French", new MtLoString()))));
+
+  IMedia spongebobEpTen = new TVEpisode("I'm Ready", "SpongeBob SquarePants", 1, 10, 
+      new ConsLoString("English", new ConsLoString("Spanish", new ConsLoString("Dutch", new MtLoString()))));
+
+  IMedia mrBeast = new YTVideo("Squid Games in Real life", "Mr. Beast", 
+      new ConsLoString("English", new ConsLoString("Japanese", new MtLoString())));
+
+  IMedia mkbdh = new YTVideo("New iPhone 14 Pro Review", "MKBHD",
+      new ConsLoString("English", new ConsLoString("Spanish", new MtLoString())));
+
+  //testing the isReallyOld method
+  boolean testIsReallyOld(Tester t) {
+    return t.checkExpect(this.shrek.isReallyOld(), false)
+        && t.checkExpect(this.veryOldShrek.isReallyOld(), true)
+        && t.checkExpect(this.friendsEpOne.isReallyOld(), false)
+        && t.checkExpect(this.spongebobEpTen.isReallyOld(), false)
+        && t.checkExpect(this.mrBeast.isReallyOld(), false)
+        && t.checkExpect(this.mkbdh.isReallyOld(), false);
+  }
+
+  boolean testIsCaptionAvailble(Tester t) {
+    return t.checkExpect(this.shrek.isCaptionAvailable("English"), true)
+        && t.checkExpect(this.shrek.isCaptionAvailable("French"), false)
+        && t.checkExpect(this.friendsEpOne.isCaptionAvailable("French"), true)
+        && t.checkExpect(this.spongebobEpTen.isCaptionAvailable("Dutch"), true)
+        && t.checkExpect(this.mrBeast.isCaptionAvailable("French"), false)
+        && t.checkExpect(this.mkbdh.isCaptionAvailable("Spanish"), true);
+  }
+  
+  boolean testFormat(Tester t) {
+    return t.checkExpect(this.shrek.format(), "Shrek 1 (2001)")
+        && t.checkExpect(this.veryOldShrek.format(), "Shrek -5 (1925)")
+        && t.checkExpect(this.friendsEpOne.format(), "Friends 1.1 - Pilot")
+        && t.checkExpect(this.spongebobEpTen.format(), "SpongeBob SquarePants 1.10 - I'm Ready")
+        && t.checkExpect(this.mrBeast.format(), "Squid Games in Real life by Mr. Beast")
+        && t.checkExpect(this.mkbdh.format(), "New iPhone 14 Pro Review by MKBHD");
+  }
+}
+
+
+
+

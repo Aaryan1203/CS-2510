@@ -1,0 +1,299 @@
+import tester.Tester;
+
+//An interface that represents a circuit
+interface ICircuit {
+
+  //counts the number of simple components in the circuit
+  int countComponents();
+
+  //computes the voltage between the two terminals of this circuit component
+  double totalVoltage();
+  
+  //computes the resistance between the two terminals of this circuit component
+  double totalResistance();
+
+  //computes the current flowing from the left terminal to the right terminal
+  double totalCurrent();
+
+  //a circuit component identical with this component, but with the voltages reversed
+  ICircuit reversePolarity();
+}
+
+//represents a battery
+class Battery implements ICircuit {
+  String name;
+  double voltage;
+  double nominalResistance;
+
+  Battery(String name, double voltage, double nominalResistance) {
+    this.name = name;
+    this.voltage = voltage;
+    this.nominalResistance = nominalResistance;
+  }
+
+  /*
+   * Fields:
+   *  this.name ... String
+   *  this.voltage ... double
+   *  this.nominalResistance ... double
+   * Methods:
+   *  this.countComponents() ... int
+   *  this.totalVoltage() ... double
+   *  this.totalCurrent() ... double
+   *  this.reversePolarity ... ICircuit
+   * Methods of fields:
+   * 
+   */
+
+  //counts the number of simple components in the battery
+  public int countComponents() {
+    return 1;
+  }
+
+  //computes the voltage between the two terminals of this battery
+  public double totalVoltage() {
+    return this.voltage;
+  }
+
+  //computes the current flowing from the left terminal to the right terminal of this battery
+  public double totalCurrent() {
+    return this.voltage / this.nominalResistance;
+  }
+
+  //a battery identical with this battery, but with the voltages reversed
+  public ICircuit reversePolarity() {
+    return new Battery(this.name, -1 * this.voltage, this.nominalResistance);
+  }
+
+  //computes the resistance between the two terminals of this battery
+  public double totalResistance() {
+    return this.nominalResistance;
+  }
+
+  
+
+}
+
+//represents a Resistor
+class Resistor implements ICircuit {
+  String name;
+  double resistance;
+
+  Resistor(String name, double resistance) {
+    this.name = name;
+    this.resistance = resistance;
+  }
+
+  /*
+   * Fields:
+   *  this.name ... String
+   *  this.resistance ... double
+   * Methods:
+   *  this.countComponents() ... int
+   *  this.totalVoltage() ... double
+   *  this.totalCurrent() ... double
+   *  this.reversePolarity ... ICircuit
+   * Methods of fields:
+   * 
+   */
+
+
+  //counts the number of simple components in the resistor
+  public int countComponents() {
+    return 1;
+  }
+
+  //computes the voltage between the two terminals of this circuit resistor
+  public double totalVoltage() {
+    return 0;
+  }
+
+  //computes the current flowing from the left terminal to the right terminal of this resistor
+  public double totalCurrent() {
+    return 0;
+  }
+
+  //reverses the polarity of the Resistor
+  public ICircuit reversePolarity() {
+    return this;
+  }
+
+  public double totalResistance() {
+    return this.resistance;
+  }
+
+}
+
+//represents a Series
+class Series implements ICircuit {
+  ICircuit first;
+  ICircuit second;
+
+  Series(ICircuit first, ICircuit second) {
+    this.first = first;
+    this.second = second;
+  }
+
+
+  /*
+   * Fields:
+   *  this.first ... Circuit
+   *  this.second ... Circuit
+   * Methods:
+   *  first.countComponents() ... int
+   *  second.countComponents() ... int
+   *  first.totalVoltage() ... double
+   *  second.totalVoltage() ... double
+   *  first.totalCurrent() ... double
+   *  second.totalCurrent() ... double
+   *  first.reversePolarity ... ICircuit
+   *  second.reversePolarity ... ICircuit
+   * Methods of fields:
+   *  
+   */
+
+  //counts the number of simple components in the series
+  public int countComponents() {
+    return first.countComponents() + second.countComponents();
+  }
+
+  //computes the voltage between the two terminals of this series
+  public double totalVoltage() {
+    return first.totalVoltage() + second.totalVoltage();
+  }
+
+  //computes the current flowing from the left terminal to the right terminal of this series
+  public double totalCurrent() {
+    return this.totalVoltage() / this.totalResistance();
+  }
+
+  //reverses the polarity of the series
+  public ICircuit reversePolarity() {
+    return new Series(first.reversePolarity(), second.reversePolarity());
+  }
+
+  //
+  public double totalResistance() {
+    return first.totalResistance() + second.totalResistance();
+  }
+
+}
+
+//represents a parallel
+class Parallel implements ICircuit {
+  ICircuit first;
+  ICircuit second;
+
+  Parallel(ICircuit first, ICircuit second) {
+    this.first = first;
+    this.second = second;
+  }
+
+  /*
+   * Fields:
+   *  this.first ... ICircuit
+   *  this.second ... ICircuit
+   * Methods:
+   *  first.countComponents() ... int
+   *  second.countComponents() ... int
+   *  first.totalVoltage() ... double
+   *  second.totalVoltage() ... double
+   *  first.totalCurrent() ... double
+   *  second.totalCurrent() ... double
+   *  first.reversePolarity ... ICircuit
+   *  second.reversePolarity ... ICircuit
+   * Methods of fields:
+   * 
+   */
+
+  //counts the number of simple components in the parallel
+  public int countComponents() {
+    return first.countComponents() + second.countComponents();
+  }
+
+  //computes the voltage between the two terminals of this parallel 
+  public double totalVoltage() {
+    return first.totalVoltage();
+  }
+
+  //computes the current flowing from the left terminal to the right terminal of this parallel
+  public double totalCurrent() {
+    return this.totalVoltage() / this.totalResistance();
+  }
+
+  //reverses the polarity of the parallel
+  public ICircuit reversePolarity() {
+    return new Parallel(first.reversePolarity(), second.reversePolarity());
+  }
+
+  
+  public double totalResistance() {
+    return 1.0 / (1.0 / first.totalResistance() + 1.0 / second.totalResistance());
+  }
+
+}
+
+
+class ExamplesCircuits {
+  ICircuit batteryOne = new Battery("B 1", 10, 25);
+  ICircuit resistorOne = new Resistor("R 1", 100);
+  ICircuit simpleSeries = new Series(this.batteryOne, this.resistorOne);
+
+  //example battery and resistors to built the Complex Circuit
+  ICircuit batteryTen = new Battery("BT 1", 10, 0);
+  ICircuit batteryTwenty = new Battery("BT 2", 20, 0);
+  ICircuit resistorTwo = new Resistor("R 2", 250);
+  ICircuit resistorThree = new Resistor("R 3", 500);
+  ICircuit resistorFour = new Resistor("R 4", 200);
+  ICircuit resistorFive = new Resistor("R 5", 5);
+
+  //example series and parallels to build the Complex Circuit
+  ICircuit seriesBattery = new Series(this.batteryTen, this.batteryTwenty);
+  ICircuit seriesResistor = new Series(this.resistorFour, this.resistorFive);
+  ICircuit parallelOne = new Parallel(this.seriesResistor, this.resistorOne);
+  ICircuit parallelTwo = new Parallel(this.parallelOne, this.resistorTwo);
+  ICircuit parallelThree = new Parallel(this.parallelTwo, this.resistorThree);
+
+  //complex circuit
+  ICircuit complexCircuit = new Series(this.seriesBattery, this.parallelThree);
+
+  //circuit that has at least two batteries, two resistors and one way of combining circuits
+  ICircuit exampleCircuit = new Parallel(this.simpleSeries, this.seriesResistor);
+
+  //batteries with reversed polarities
+  ICircuit reverseBatteryOne = new Battery("B 1", -10, 25);
+  ICircuit reverseBatteryTen = new Battery("BT 1", -10, 0);
+  ICircuit reverseBatteryTwenty = new Battery("BT 2", -20, 0);
+
+  boolean testCircuit(Tester t) {
+    return t.checkExpect(batteryOne.countComponents(), 1)
+        && t.checkExpect(resistorOne.countComponents(), 1)
+        && t.checkExpect(parallelTwo.countComponents(), 4)
+        && t.checkExpect(complexCircuit.countComponents(), 7)
+        && t.checkInexact(batteryOne.totalVoltage(), 10.0, 0.1)
+        && t.checkInexact(resistorTwo.totalVoltage(), 0.0, 0.1)
+        && t.checkInexact(parallelTwo.totalVoltage(), 0.0, 0.1)
+        && t.checkInexact(complexCircuit.totalVoltage(), 30.0, 0.1)
+        && t.checkInexact(batteryOne.totalCurrent(), 0.4, 0.01)
+        && t.checkInexact(resistorTwo.totalCurrent(), 0.0, 0.01)
+        && t.checkInexact(simpleSeries.totalCurrent(), 0.08, 0.01)
+        && t.checkInexact(complexCircuit.totalCurrent(), 0.6, 0.01)
+        && t.checkExpect(batteryOne.reversePolarity(), this.reverseBatteryOne)
+        && t.checkExpect(resistorOne.reversePolarity(), this.resistorOne)
+        && t.checkExpect(seriesBattery.reversePolarity(), 
+            new Series(this.reverseBatteryTen, this.reverseBatteryTwenty))
+        && t.checkExpect(parallelOne.reversePolarity(), 
+            new Parallel(this.seriesResistor, this.resistorOne));
+  }
+}
+
+
+
+
+
+
+
+
+
+
+

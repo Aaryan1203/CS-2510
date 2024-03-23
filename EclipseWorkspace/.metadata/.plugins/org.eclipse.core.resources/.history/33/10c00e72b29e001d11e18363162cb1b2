@@ -1,0 +1,114 @@
+import tester.Tester;
+
+// to represent a list of Strings
+interface ILoString {
+
+  // combine all Strings in this list into one
+  String combine();
+
+  //Produces a new list, sorted in alphabetical order
+  ILoString sort();
+  
+  //
+  ILoString insert(String first);
+}
+
+// to represent an empty list of Strings
+class MtLoString implements ILoString {
+  MtLoString(){}
+
+  /*
+  FIELDS: none
+
+  METHODS
+  this.combine() ... String
+  this.sort() ... ILoString
+
+  METHODS FOR FIELDS: none
+*/
+  
+  // combine all Strings in this list into one
+  public String combine() {
+    return "";
+  }
+
+  //Sorts the empty list of strings
+  public ILoString sort() {
+    return new MtLoString();
+  }
+
+  //inserts the new string into the empty list of strings
+  public ILoString insert(String first) {
+    return new ConsLoString(first, new MtLoString());
+  }  
+  
+}
+
+// to represent a nonempty list of Strings
+class ConsLoString implements ILoString {
+  String first;
+  ILoString rest;
+
+  ConsLoString(String first, ILoString rest){
+    this.first = first;
+    this.rest = rest;  
+  }
+
+  /*
+     FIELDS:
+     this.first ... String
+     this.rest ... ILoString
+
+     METHODS
+     this.combine() ... String
+     this.sort() ... ILoString
+
+     METHODS FOR FIELDS
+     this.first.concat(String) ... String
+     this.first.compareTo(String) ... int
+     this.rest.combine() ... String
+     this.rest.sort() ... ILoString
+   */
+
+  // combine all Strings in this list into one
+  public String combine(){
+    return this.first.concat(this.rest.combine());
+  }
+
+  //Sorts the non-empty list of strings
+  public ILoString sort() {
+    
+  }
+
+  //insert the string into the already sorted rest
+  public ILoString insert(String first) {
+    return new ConsLoString(first, this.rest.sort());
+  }
+
+}
+
+// to represent examples for lists of strings
+class ExamplesStrings{
+
+  ILoString hello = new ConsLoString("Hello", new MtLoString());
+  ILoString how = new ConsLoString("How", new MtLoString());
+  ILoString are = new ConsLoString("Are", new MtLoString());
+  ILoString you = new ConsLoString("You", new MtLoString());
+  ILoString whatsUp = new ConsLoString("Whats ", 
+      new ConsLoString ("Up", new MtLoString()));
+  ILoString howAreYou = new ConsLoString("How ", 
+      new ConsLoString ("Are ", 
+          new ConsLoString("You", new MtLoString())));
+  ILoString mary = new ConsLoString("Mary ",
+      new ConsLoString("had ",
+          new ConsLoString("a ",
+              new ConsLoString("little ",
+                  new ConsLoString("lamb.", new MtLoString())))));
+
+  // test the method combine for the lists of Strings
+  boolean testCombine(Tester t){
+    return t.checkExpect(this.mary.combine(), "Mary had a little lamb.")
+        && t.checkExpect(this.whatsUp.combine(), "Whats Up")
+        && t.checkExpect(this.howAreYou.combine(), "How Are You");
+  }
+}

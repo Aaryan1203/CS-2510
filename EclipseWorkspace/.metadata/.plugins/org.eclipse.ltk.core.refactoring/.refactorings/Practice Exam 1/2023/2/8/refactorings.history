@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename method &apos;ICard.checkCredit(...)&apos; to &apos;checkCard&apos;&#x0A;- Original project: &apos;Practice Exam 1&apos;&#x0A;- Original element: &apos;ICard.checkCredit(...)&apos;&#x0A;- Renamed element: &apos;ICard.checkCard(...)&apos;&#x0A;- Update references to refactored element" delegate="false" deprecate="false" description="Rename method &apos;checkCredit&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.method" input="/src&lt;{Card.java[ICard~checkCredit~I~I~I~QString;" name="checkCard" references="true" stamp="1676935639943" version="1.0"/>
+</session>
